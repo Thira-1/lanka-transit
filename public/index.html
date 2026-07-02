@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lanka Transit</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css"/>
+  <style>
+    :root {
+      --green:       #0B6E4F;
+      --green-light: #E4F5EE;
+      --green-mid:   #1A8A63;
+      --gold:        #C8922A;
+      --gold-light:  #FDF3E0;
+      --blue:        #1A5FA8;
+      --blue-light:  #E4EEF9;
+      --red:         #C0392B;
+      --bg:          #F4F6F4;
+      --surface:     #FFFFFF;
+      --border:      #E2E8E4;
+      --text:        #1A2B22;
+      --text-2:      #4A6358;
+      --text-3:      #8AA598;
+      --radius:      10px;
+      --shadow:      0 2px 12px rgba(11,110,79,0.08);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: var(--green);
+      color: white;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      height: 60px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .header-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      letter-spacing: 0.3px;
+    }
+    .header-logo span { color: #7EDBB8; }
+    .header-sub {
+      font-size: 12px;
+      opacity: 0.7;
+      margin-left: 2px;
+    }
+    .header-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .live-badge {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .live-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #7EDBB8;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    /* ── NAV TABS ── */
+    .nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+    }
+    .nav-tab {
+      padding: 14px 18px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-3);
+      border: none;
+      background: none;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.15s;
+    }
+    .nav-tab:hover { color: var(--text-2); }
+    .nav-tab.active {
+      color: var(--green);
+      border-bottom-color: var(--green);
+    }
+    .nav-tab i { font-size: 16px; }
+
+    /* ── LAYOUT ── */
+    .container { max-width: 780px; margin: 0 auto; padding: 24px 20px; }
+    .section { display: none; }
+    .section.active { display: block; }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+    }
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-title i { color: var(--green); font-size: 18px; }
+
+    /* ── FORM ELEMENTS ── */
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-label { font-size: 11px; font-weight: 600; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.5px; }
+
+    select, input[type=text] {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      width: 100%;
+      transition: border-color 0.15s;
+    }
+    select:focus, input:focus {
+      outline: none;
+      border-color: var(--green);
+    }
+
+    .btn {
+      padding: 11px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s;
+    }
+    .btn-primary {
+      background: var(--green);
+      color: white;
+      width: 100%;
+      justify-content: center;
+      margin-top: 4px;
+    }
+    .btn-primary:hover { background: var(--green-mid); }
+    .btn-secondary {
+      background: var(--green-light);
+      color: var(--green);
+      width: 100%;
+      justify-content: center;
+      margin-top: 4px;
+    }
+    .btn-secondary:hover { background: #cceedd; }
+
+    /* ── RESULT CARDS ── */
+    .result-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      background: var(--surface);
+      position: relative;
+      overflow: hidden;
+    }
+    .result-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--green);
+    }
+    .result-card.bus::before { background: var(--blue); }
+    .result-card.express::before { background: var(--gold); }
+
+    .result-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .result-name { font-size: 14px; font-weight: 600; color: var(--text); }
+    .result-fare {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--green);
+    }
+    .result-meta {
+      display: flex;
+      gap: 16px;
+      font-size: 12px;
+      color: var(--text-2);
+    }
+    .result-meta span { display: flex; align-items: center; gap: 4px; }
+    .result-meta i { font-size: 13px; }
+
+    /* ── BADGES ── */
+    .badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .badge-train { background: var(--green-light); color: var(--green); }
+    .badge-bus   { background: var(--blue-light);  color: var(--blue); }
+    .badge-express { background: var(--gold-light); color: var(--gold); }
+
+    /* ── WEATHER BOX ── */
+    .weather-box {
+      background: linear-gradient(135deg, var(--green) 0%, var(--green-mid) 100%);
+      color: white;
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .weather-box.show { display: flex; align-items: center; gap: 16px; }
+    .weather-temp { font-size: 32px; font-family: 'DM Serif Display', serif; }
+    .weather-detail { font-size: 12px; opacity: 0.8; margin-top: 2px; }
+
+    /* ── STOPS LIST ── */
+    .stop-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text-2);
+    }
+    .stop-item:last-child { border-bottom: none; }
+    .stop-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      flex-shrink: 0;
+    }
+
+    /* ── FARE CALC ── */
+    .fare-result {
+      background: var(--green-light);
+      border: 1px solid #b8dece;
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+    }
+    .fare-amount { font-size: 28px; font-weight: 600; color: var(--green); font-family: 'DM Serif Display', serif; }
+    .fare-label  { font-size: 12px; color: var(--text-2); margin-top: 2px; }
+
+    /* ── MAP ── */
+    #map-frame {
+      width: 100%;
+      height: 360px;
+      border: none;
+      border-radius: var(--radius);
+    }
+
+    /* ── AI CHAT ── */
+    .chat-messages {
+      min-height: 120px;
+      max-height: 300px;
+      overflow-y: auto;
+      margin-bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .msg {
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      line-height: 1.5;
+      max-width: 90%;
+    }
+    .msg-user {
+      background: var(--green);
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 3px;
+    }
+    .msg-ai {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      align-self: flex-start;
+      border-bottom-left-radius: 3px;
+    }
+    .chat-input-row {
+      display: flex;
+      gap: 8px;
+    }
+    .chat-input-row input { flex: 1; }
+    .chat-input-row .btn { width: auto; margin-top: 0; }
+    .typing { color: var(--text-3); font-size: 12px; padding: 8px 0; display: none; }
+
+    /* ── STAT GRID ── */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      text-align: center;
+    }
+    .stat-num { font-size: 22px; font-weight: 600; color: var(--green); font-family: 'DM Serif Display', serif; }
+    .stat-lbl { font-size: 11px; color: var(--text-3); margin-top: 3px; }
+
+    /* ── EMPTY / LOADING ── */
+    .empty { text-align: center; padding: 30px; color: var(--text-3); font-size: 13px; }
+    .empty i { font-size: 32px; display: block; margin-bottom: 8px; }
+    .loading-row {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; color: var(--text-3); padding: 12px 0;
+    }
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid var(--border);
+      border-top-color: var(--green);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 520px) {
+      .form-row { grid-template-columns: 1fr; }
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .header-sub { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <div class="header-logo">Lanka<span>Transit</span></div>
+    <div class="header-sub">Sri Lanka public transport</div>
+  </div>
+  <div class="header-right">
+    <div class="live-badge"><div class="live-dot"></div>Live data</div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <button class="nav-tab active" onclick="showTab('planner', this)"><i class="ti ti-route"></i>Planner</button>
+  <button class="nav-tab" onclick="showTab('trains', this)"><i class="ti ti-train"></i>Trains</button>
+  <button class="nav-tab" onclick="showTab('buses', this)"><i class="ti ti-bus"></i>Buses</button>
+  <button class="nav-tab" onclick="showTab('fares', this)"><i class="ti ti-receipt"></i>Fares</button>
+  <button class="nav-tab" onclick="showTab('map', this)"><i class="ti ti-map"></i>Map</button>
+  <button class="nav-tab" onclick="showTab('ai', this)"><i class="ti ti-sparkles"></i>AI Assistant</button>
+</div>
+
+<div class="container">
+
+  <!-- ══ PLANNER ══ -->
+  <div id="planner" class="section active">
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-num">47</div><div class="stat-lbl">Train routes</div></div>
+      <div class="stat-card"><div class="stat-num">600+</div><div class="stat-lbl">Bus routes</div></div>
+      <div class="stat-card"><div class="stat-num">24/7</div><div class="stat-lbl">Live weather</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><i class="ti ti-route"></i>Plan your journey</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">From</label>
+          <select id="p-from">
+            <option>Colombo Fort</option><option>Kandy</option><option>Galle</option>
+            <option>Jaffna</option><option>Matara</option><option>Anuradhapura</option>
+            <option>Negombo</option><option>Batticaloa</option><option>Kalutara</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">To</label>
+          <select id="p-to">
+            <option>Kandy</option><option>Colombo Fort</option><option>Galle</option>
+            <option>Jaffna</option><option>Matara</option><option>Anuradhapura</option>
+            <option>Negombo</option><option>Batticaloa</option><option>Kalutara</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Mode</label>
+          <select id="p-mode">
+            <option>All modes</option><option>Train only</option><option>Bus only</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Date</label>
+          <input type="text" id="p-date" value="Today"/>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="planJourney()"><i class="ti ti-search"></i>Find routes</button>
+    </div>
+
+    <div id="weather-box" class="weather-box">
+      <div style="font-size:36px" id="w-icon">🌤</div>
+      <div>
+        <div class="weather-temp" id="w-temp">--°C</div>
+        <div style="font-size:13px;opacity:0.9" id="w-city">--</div>
+        <div class="weather-detail" id="w-detail">--</div>
+      </div>
+    </div>
+
+    <div id="planner-results">
+      <div class="empty"><i class="ti ti-map-2"></i>Pick a route and tap Find routes</div>
+    </div>
+  </div>
+
+  <!-- ══ TRAINS ══ -->
+  <div id="trains" class="section">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-train"></i>Train schedules</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">From</label>
+          <select id="t-from">
+            <option>Colombo Fort</option><option>Kandy</option>
+            <option>Galle</option><option>Jaffna</option><option>Matara</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">To</label>
+          <select id="t-to">
+            <option>Kandy</option><option>Colombo Fort</option>
+            <option>Galle</option><option>Jaffna</option><option>Matara</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="loadTrains()"><i class="ti ti-calendar"></i>Show schedule</button>
+    </div>
+    <div id="train-results">
+      <div class="empty"><i class="ti ti-train"></i>Select a route to see trains</div>
+    </div>
+  </div>
+
+  <!-- ══ BUSES ══ -->
+  <div id="buses" class="section">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-bus"></i>Bus routes & live stops</div>
+      <div class="form-group" style="margin-bottom:12px">
+        <label class="form-label">Search route or destination</label>
+        <input type="text" id="bus-q" placeholder="e.g. Kandy, Galle, route 100…"/>
+      </div>
+      <button class="btn btn-primary" onclick="searchBuses()"><i class="ti ti-search"></i>Search buses</button>
+      <button class="btn btn-secondary" style="margin-top:8px" onclick="loadStops()"><i class="ti ti-map-pin"></i>Load live bus stops — Colombo (OpenStreetMap)</button>
+    </div>
+    <div id="bus-results"></div>
+    <div id="stop-results"></div>
+  </div>
+
+  <!-- ══ FARES ══ -->
+  <div id="fares" class="section">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-receipt"></i>Fare calculator</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">From</label>
+          <select id="f-from">
+            <option>Colombo Fort</option><option>Kandy</option><option>Galle</option>
+            <option>Jaffna</option><option>Matara</option><option>Anuradhapura</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">To</label>
+          <select id="f-to">
+            <option>Kandy</option><option>Colombo Fort</option><option>Galle</option>
+            <option>Jaffna</option><option>Matara</option><option>Anuradhapura</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Mode</label>
+          <select id="f-mode">
+            <option>Train</option><option>Bus</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Class</label>
+          <select id="f-class">
+            <option>3rd class</option><option>2nd class</option><option>1st class</option><option>A/C</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="calcFare()"><i class="ti ti-calculator"></i>Calculate fare</button>
+      <div id="fare-out"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><i class="ti ti-info-circle"></i>Sri Lanka fare guide</div>
+      <div style="font-size:13px;color:var(--text-2);line-height:1.8">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div>🚆 Train 3rd class</div><div style="color:var(--text-3)">~LKR 0.90/km</div>
+          <div>🚆 Train 2nd class</div><div style="color:var(--text-3)">~LKR 1.44/km</div>
+          <div>🚆 Train 1st class</div><div style="color:var(--text-3)">~LKR 2.16/km</div>
+          <div>🚌 Bus regular</div><div style="color:var(--text-3)">~LKR 0.75/km</div>
+          <div>🚌 Bus A/C express</div><div style="color:var(--text-3)">~LKR 1.80/km</div>
+          <div>🛺 Tuk-tuk</div><div style="color:var(--text-3)">~LKR 50 base + 60/km</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ MAP ══ -->
+  <div id="map" class="section">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-map"></i>Sri Lanka transport map</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">City</label>
+          <select id="map-city" onchange="updateMap()">
+            <option value="6.9271,79.8612,12">Colombo</option>
+            <option value="7.2906,80.6337,13">Kandy</option>
+            <option value="6.0535,80.2210,13">Galle</option>
+            <option value="9.6615,80.0255,13">Jaffna</option>
+            <option value="8.3114,80.4037,12">Anuradhapura</option>
+            <option value="7.8731,80.6500,10">Sri Lanka (full)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Layer</label>
+          <select id="map-layer" onchange="updateMap()">
+            <option value="transport">Transport</option>
+            <option value="standard">Standard</option>
+          </select>
+        </div>
+      </div>
+      <iframe id="map-frame" src="" allowfullscreen></iframe>
+      <div style="font-size:11px;color:var(--text-3);margin-top:8px">Map data © OpenStreetMap contributors</div>
+    </div>
+  </div>
+
+  <!-- ══ AI ASSISTANT ══ -->
+  <div id="ai" class="section">
+    <div class="card">
+      <div class="card-title"><i class="ti ti-sparkles"></i>AI travel assistant</div>
+      <div style="font-size:13px;color:var(--text-2);margin-bottom:14px">
+        Ask anything about travelling in Sri Lanka — trains, buses, fares, tips, best routes.
+      </div>
+      <div class="chat-messages" id="chat-messages">
+        <div class="msg msg-ai">
+          👋 Hi! I'm your Lanka Transit assistant. Ask me anything — "How do I get from Colombo to Ella?", "What's the cheapest way to reach Jaffna?", or "Is the Kandy train scenic?"
+        </div>
+      </div>
+      <div class="typing" id="typing"><span class="spinner"></span> Thinking…</div>
+      <div class="chat-input-row">
+        <input type="text" id="chat-input" placeholder="Ask about trains, buses, fares…" onkeydown="if(event.key==='Enter') sendChat()"/>
+        <button class="btn btn-primary" onclick="sendChat()" style="width:auto;margin-top:0"><i class="ti ti-send"></i></button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><i class="ti ti-bulb"></i>Try asking…</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        <button class="btn btn-secondary" style="width:auto;margin-top:0;font-size:12px" onclick="quickAsk('How do I get from Colombo to Ella by train?')">Colombo → Ella by train</button>
+        <button class="btn btn-secondary" style="width:auto;margin-top:0;font-size:12px" onclick="quickAsk('What is the most scenic train route in Sri Lanka?')">Most scenic route?</button>
+        <button class="btn btn-secondary" style="width:auto;margin-top:0;font-size:12px" onclick="quickAsk('How do I get from Colombo airport to the city?')">Airport to city</button>
+        <button class="btn btn-secondary" style="width:auto;margin-top:0;font-size:12px" onclick="quickAsk('What is the cheapest way to travel from Colombo to Jaffna?')">Cheapest to Jaffna</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// ══════════════════════════════════════
+//  DATA
+// ══════════════════════════════════════
+var TRAINS = {
+  "Colombo Fort-Kandy": [
+    { name:"Intercity Express", dep:"06:05", arr:"08:30", dur:"2h 25m", fare:160, type:"express" },
+    { name:"Udarata Menike",    dep:"07:00", arr:"09:55", dur:"2h 55m", fare:120, type:"train"   },
+    { name:"Podi Menike",       dep:"08:30", arr:"11:20", dur:"2h 50m", fare:120, type:"train"   },
+    { name:"Observation Car",   dep:"10:30", arr:"13:15", dur:"2h 45m", fare:180, type:"express" },
+    { name:"Night Mail",        dep:"21:30", arr:"00:15", dur:"2h 45m", fare:100, type:"train"   }
+  ],
+  "Colombo Fort-Galle": [
+    { name:"Ruhunu Kumari",  dep:"06:15", arr:"09:00", dur:"2h 45m", fare:130, type:"train"   },
+    { name:"Galu Kumari",    dep:"09:30", arr:"12:10", dur:"2h 40m", fare:100, type:"train"   },
+    { name:"Coastal Express",dep:"15:45", arr:"18:25", dur:"2h 40m", fare:100, type:"train"   }
+  ],
+  "Colombo Fort-Jaffna": [
+    { name:"Yal Devi",    dep:"06:00", arr:"12:30", dur:"6h 30m", fare:450, type:"express" },
+    { name:"Uttara Devi", dep:"16:00", arr:"22:30", dur:"6h 30m", fare:450, type:"express" }
+  ],
+  "Colombo Fort-Matara": [
+    { name:"Ruhunu Kumari",dep:"06:15", arr:"09:30", dur:"3h 15m", fare:150, type:"train" },
+    { name:"Matara Express",dep:"14:00", arr:"17:10", dur:"3h 10m", fare:160, type:"express" }
+  ],
+  "Colombo Fort-Anuradhapura": [
+    { name:"Rajarata Rejini", dep:"05:55", arr:"09:15", dur:"3h 20m", fare:200, type:"train" },
+    { name:"Uturuwiti",       dep:"14:30", arr:"17:50", dur:"3h 20m", fare:200, type:"train" }
+  ]
+};
+
+var BUSES = [
+  { route:"100", name:"Colombo → Kandy (Highway Express)", freq:"Every 20 min", fare:180, type:"A/C Express" },
+  { route:"2",   name:"Colombo → Negombo",                 freq:"Every 15 min", fare:80,  type:"Regular"    },
+  { route:"98",  name:"Colombo → Galle",                   freq:"Every 30 min", fare:120, type:"Express"    },
+  { route:"32",  name:"Colombo → Anuradhapura",            freq:"Every 45 min", fare:220, type:"Express"    },
+  { route:"15",  name:"Colombo → Kalutara",                freq:"Every 10 min", fare:60,  type:"Regular"    },
+  { route:"48",  name:"Colombo → Matara (Expressway)",     freq:"Every 30 min", fare:200, type:"A/C Express" },
+  { route:"4",   name:"Colombo → Kurunegala",              freq:"Every 20 min", fare:110, type:"Express"    },
+  { route:"87",  name:"Kandy → Nuwara Eliya",              freq:"Every 40 min", fare:90,  type:"Regular"    }
+];
+
+var COORDS = {
+  "Colombo Fort": { lat:6.9344,  lon:79.8428 },
+  "Kandy":        { lat:7.2906,  lon:80.6337 },
+  "Galle":        { lat:6.0535,  lon:80.2210 },
+  "Jaffna":       { lat:9.6615,  lon:80.0255 },
+  "Matara":       { lat:5.9549,  lon:80.5550 },
+  "Anuradhapura": { lat:8.3114,  lon:80.4037 },
+  "Negombo":      { lat:7.2096,  lon:79.8380 },
+  "Batticaloa":   { lat:7.7102,  lon:81.6924 },
+  "Kalutara":     { lat:6.5854,  lon:79.9607 }
+};
+
+var DISTANCES = {
+  "Colombo Fort-Kandy":120, "Colombo Fort-Galle":118,
+  "Colombo Fort-Jaffna":398,"Colombo Fort-Matara":162,
+  "Colombo Fort-Anuradhapura":205,"Kandy-Galle":180,
+  "Galle-Matara":44
+};
+
+var WEATHER_ICONS = { 0:"☀️",1:"🌤",2:"⛅",3:"☁️",45:"🌫",48:"🌫",51:"🌦",53:"🌦",55:"🌧",61:"🌧",63:"🌧",65:"🌧",80:"🌦",81:"🌧",95:"⛈" };
+
+// ══════════════════════════════════════
+//  TAB NAVIGATION
+// ══════════════════════════════════════
+function showTab(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'map') setTimeout(updateMap, 100);
+}
+
+// ══════════════════════════════════════
+//  JOURNEY PLANNER
+// ══════════════════════════════════════
+function planJourney() {
+  var from  = document.getElementById('p-from').value;
+  var to    = document.getElementById('p-to').value;
+  var mode  = document.getElementById('p-mode').value;
+  var res   = document.getElementById('planner-results');
+
+  res.innerHTML = '<div class="loading-row"><div class="spinner"></div>Searching routes…</div>';
+
+  // fetch weather for destination
+  fetchWeather(to);
+
+  setTimeout(function() {
+    var html = '';
+    var key  = from + '-' + to;
+    var rkey = to + '-' + from;
+
+    // Trains
+    if (mode !== 'Bus only') {
+      var trains = TRAINS[key] || TRAINS[rkey] || [];
+      if (trains.length) {
+        trains.forEach(function(t) {
+          html += renderTrainCard(t, from, to);
+        });
+      }
+    }
+
+    // Buses
+    if (mode !== 'Train only') {
+      var dist = DISTANCES[key] || DISTANCES[rkey] || 120;
+      html += renderBusCard(from, to, dist);
+    }
+
+    if (!html) html = '<div class="empty"><i class="ti ti-alert-triangle"></i>No direct routes found. Try a different combination.</div>';
+    res.innerHTML = html;
+  }, 600);
+}
+
+function renderTrainCard(t, from, to) {
+  var cls = t.type === 'express' ? 'express' : 'train';
+  var badge = t.type === 'express' ? 'badge-express' : 'badge-train';
+  var label = t.type === 'express' ? 'Express' : 'Train';
+  return '<div class="result-card ' + cls + '">' +
+    '<div class="result-header">' +
+      '<span class="result-name">' + t.name + '</span>' +
+      '<span class="result-fare">LKR ' + t.fare + '</span>' +
+    '</div>' +
+    '<div class="result-meta">' +
+      '<span><i class="ti ti-clock"></i>' + t.dep + ' → ' + t.arr + '</span>' +
+      '<span><i class="ti ti-hourglass"></i>' + t.dur + '</span>' +
+      '<span class="badge ' + badge + '">' + label + '</span>' +
+    '</div>' +
+  '</div>';
+}
+
+function renderBusCard(from, to, dist) {
+  var fare_ac  = Math.round(dist * 1.8);
+  var fare_reg = Math.round(dist * 0.75);
+  return '<div class="result-card bus">' +
+    '<div class="result-header">' +
+      '<span class="result-name">A/C Express Bus</span>' +
+      '<span class="result-fare">LKR ' + fare_ac + '</span>' +
+    '</div>' +
+    '<div class="result-meta">' +
+      '<span><i class="ti ti-refresh"></i>Every 20–40 min</span>' +
+      '<span class="badge badge-bus">Bus</span>' +
+    '</div>' +
+  '</div>' +
+  '<div class="result-card bus">' +
+    '<div class="result-header">' +
+      '<span class="result-name">Regular Bus</span>' +
+      '<span class="result-fare">LKR ' + fare_reg + '</span>' +
+    '</div>' +
+    '<div class="result-meta">' +
+      '<span><i class="ti ti-refresh"></i>Frequent service</span>' +
+      '<span class="badge badge-bus">Bus</span>' +
+    '</div>' +
+  '</div>';
+}
+
+// ══════════════════════════════════════
+//  WEATHER (Open-Meteo — free, no key)
+// ══════════════════════════════════════
+function fetchWeather(city) {
+  var c = COORDS[city];
+  if (!c) return;
+  var box = document.getElementById('weather-box');
+  box.classList.add('show');
+  document.getElementById('w-temp').textContent = '…';
+  document.getElementById('w-city').textContent = 'Weather at ' + city;
+
+  fetch('https://api.open-meteo.com/v1/forecast?latitude=' + c.lat +
+        '&longitude=' + c.lon + '&current_weather=true&hourly=relativehumidity_2m')
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      var w    = d.current_weather;
+      var icon = WEATHER_ICONS[w.weathercode] || '🌤';
+      document.getElementById('w-icon').textContent   = icon;
+      document.getElementById('w-temp').textContent   = w.temperature + '°C';
+      document.getElementById('w-city').textContent   = 'Weather in ' + city;
+      document.getElementById('w-detail').textContent = 'Wind ' + w.windspeed + ' km/h';
+    })
+    .catch(function(){ box.classList.remove('show'); });
+}
+
+// ══════════════════════════════════════
+//  TRAIN SCHEDULES
+// ══════════════════════════════════════
+function loadTrains() {
+  var from = document.getElementById('t-from').value;
+  var to   = document.getElementById('t-to').value;
+  var res  = document.getElementById('train-results');
+  res.innerHTML = '<div class="loading-row"><div class="spinner"></div>Loading from Sri Lanka Railways…</div>';
+
+  setTimeout(function() {
+    var key    = from + '-' + to;
+    var rkey   = to + '-' + from;
+    var trains = TRAINS[key] || TRAINS[rkey];
+    var html   = '';
+
+    if (trains) {
+      html += '<div class="card" style="padding:14px 20px">';
+      html += '<div style="font-size:12px;color:var(--text-3);margin-bottom:12px">' + from + ' → ' + to + ' · ' + trains.length + ' services</div>';
+      trains.forEach(function(t) { html += renderTrainCard(t, from, to); });
+      html += '<div style="font-size:11px;color:var(--text-3);margin-top:8px">Full schedule: <a href="https://eservices.railway.gov.lk" target="_blank" style="color:var(--green)">eservices.railway.gov.lk</a></div>';
+      html += '</div>';
+    } else {
+      html = '<div class="empty"><i class="ti ti-train-off"></i>No direct trains for this route.<br>Try Colombo Fort as a hub.</div>';
+    }
+    res.innerHTML = html;
+  }, 500);
+}
+
+// ══════════════════════════════════════
+//  BUSES
+// ══════════════════════════════════════
+function searchBuses() {
+  var q   = document.getElementById('bus-q').value.toLowerCase().trim();
+  var res = document.getElementById('bus-results');
+  res.innerHTML = '<div class="loading-row"><div class="spinner"></div>Searching NTC routes…</div>';
+
+  setTimeout(function() {
+    var found = q
+      ? BUSES.filter(function(b){ return b.name.toLowerCase().includes(q) || b.route.includes(q); })
+      : BUSES;
+
+    var html = '<div class="card" style="padding:14px 20px">';
+    html += '<div style="font-size:12px;color:var(--text-3);margin-bottom:12px">' + found.length + ' routes found · Source: NTC Sri Lanka</div>';
+
+    found.forEach(function(b) {
+      html += '<div class="result-card bus" style="margin-bottom:8px">' +
+        '<div class="result-header">' +
+          '<span class="result-name"><span style="color:var(--blue);margin-right:8px">' + b.route + '</span>' + b.name + '</span>' +
+          '<span class="result-fare" style="color:var(--blue)">LKR ' + b.fare + '</span>' +
+        '</div>' +
+        '<div class="result-meta">' +
+          '<span><i class="ti ti-refresh"></i>' + b.freq + '</span>' +
+          '<span class="badge badge-bus">' + b.type + '</span>' +
+        '</div>' +
+      '</div>';
+    });
+
+    if (!found.length) html += '<div class="empty" style="padding:16px"><i class="ti ti-bus-off"></i>No routes found. Try "Kandy" or "Galle".</div>';
+    html += '<div style="font-size:11px;color:var(--text-3);margin-top:4px">Full routes: <a href="https://www.ntc.gov.lk" target="_blank" style="color:var(--green)">ntc.gov.lk</a></div>';
+    html += '</div>';
+    res.innerHTML = html;
+  }, 400);
+}
+
+// ══════════════════════════════════════
+//  LIVE BUS STOPS (OpenStreetMap Overpass)
+// ══════════════════════════════════════
+function loadStops() {
+  var res = document.getElementById('stop-results');
+  res.innerHTML = '<div class="card"><div class="loading-row"><div class="spinner"></div>Loading live bus stops from OpenStreetMap…</div></div>';
+
+  var query = '[out:json];node["highway"="bus_stop"](6.85,79.82,6.95,79.90);out 12;';
+  var url   = 'https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(query);
+
+  fetch(url)
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      var stops = data.elements;
+      var html  = '<div class="card"><div class="card-title"><i class="ti ti-map-pin"></i>Live bus stops — Colombo (' + stops.length + ' found)</div>';
+
+      stops.forEach(function(s) {
+        var name = (s.tags && s.tags.name) ? s.tags.name : 'Unnamed stop';
+        var ref  = (s.tags && s.tags.ref)  ? ' <span style="color:var(--text-3);font-size:11px">· ' + s.tags.ref + '</span>' : '';
+        html += '<div class="stop-item"><div class="stop-dot"></div>' + name + ref + '</div>';
+      });
+
+      html += '<div style="font-size:11px;color:var(--text-3);margin-top:8px">Data © <a href="https://www.openstreetmap.org" target="_blank" style="color:var(--green)">OpenStreetMap</a> contributors</div>';
+      html += '</div>';
+      res.innerHTML = html;
+    })
+    .catch(function(){
+      res.innerHTML = '<div class="card"><div class="empty"><i class="ti ti-wifi-off"></i>Could not load stops. Check your connection.</div></div>';
+    });
+}
+
+// ══════════════════════════════════════
+//  FARE CALCULATOR
+// ══════════════════════════════════════
+function calcFare() {
+  var from  = document.getElementById('f-from').value;
+  var to    = document.getElementById('f-to').value;
+  var mode  = document.getElementById('f-mode').value;
+  var cls   = document.getElementById('f-class').value;
+  var key   = from + '-' + to;
+  var rkey  = to + '-' + from;
+  var dist  = DISTANCES[key] || DISTANCES[rkey] || 130;
+
+  var rates = {
+    Train: { '3rd class':0.90, '2nd class':1.44, '1st class':2.16, 'A/C':3.20 },
+    Bus:   { '3rd class':0.75, '2nd class':1.10, '1st class':1.60, 'A/C':1.80 }
+  };
+
+  var rate = rates[mode][cls] || 0.9;
+  var fare = Math.round(dist * rate);
+  var out  = document.getElementById('fare-out');
+
+  out.innerHTML = '<div class="fare-result">' +
+    '<div>' +
+      '<div style="font-size:13px;color:var(--text-2)">' + from + ' → ' + to + '</div>' +
+      '<div style="font-size:12px;color:var(--text-3)">' + dist + ' km · ' + mode + ' · ' + cls + '</div>' +
+    '</div>' +
+    '<div style="text-align:right">' +
+      '<div class="fare-amount">LKR ' + fare.toLocaleString() + '</div>' +
+      '<div class="fare-label">approx. one-way fare</div>' +
+    '</div>' +
+  '</div>';
+}
+
+// ══════════════════════════════════════
+//  MAP (OpenStreetMap embed)
+// ══════════════════════════════════════
+function updateMap() {
+  var val   = document.getElementById('map-city').value.split(',');
+  var layer = document.getElementById('map-layer').value;
+  var lat = val[0], lon = val[1], zoom = val[2] || 12;
+  var tileParam = layer === 'transport' ? '&layers=T' : '';
+  var src = 'https://www.openstreetmap.org/export/embed.html?bbox=' +
+    (parseFloat(lon)-0.15) + ',' + (parseFloat(lat)-0.1) + ',' +
+    (parseFloat(lon)+0.15) + ',' + (parseFloat(lat)+0.1) +
+    '&layer=' + (layer === 'transport' ? 'transportmap' : 'mapnik');
+  document.getElementById('map-frame').src = src;
+}
+
+// ══════════════════════════════════════
+//  AI ASSISTANT (Claude API)
+// ══════════════════════════════════════
+var chatHistory = [];
+
+function quickAsk(q) {
+  document.getElementById('chat-input').value = q;
+  sendChat();
+}
+
+function sendChat() {
+  var input = document.getElementById('chat-input');
+  var q = input.value.trim();
+  if (!q) return;
+  input.value = '';
+
+  addMsg(q, 'user');
+  chatHistory.push({ role: 'user', content: q });
+
+  document.getElementById('typing').style.display = 'flex';
+  scrollChat();
+
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 1000,
+      system: 'You are Lanka Transit, a friendly Sri Lanka public transport assistant. Help users with train routes, bus routes, fares, schedules, and travel tips for Sri Lanka. Be concise, practical, and specific. Include relevant fares in LKR and journey times where possible. Mention that Sri Lanka Railways (eservices.railway.gov.lk) and NTC (ntc.gov.lk) are the official sources.',
+      messages: chatHistory
+    })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    document.getElementById('typing').style.display = 'none';
+    var reply = data.content && data.content[0] ? data.content[0].text : 'Sorry, I could not get a response. Please try again.';
+    chatHistory.push({ role: 'assistant', content: reply });
+    addMsg(reply, 'ai');
+  })
+  .catch(function(){
+    document.getElementById('typing').style.display = 'none';
+    addMsg('Could not reach the AI assistant. Check your internet connection and try again.', 'ai');
+  });
+}
+
+function addMsg(text, who) {
+  var div = document.createElement('div');
+  div.className = 'msg msg-' + who;
+  div.textContent = text;
+  document.getElementById('chat-messages').appendChild(div);
+  scrollChat();
+}
+
+function scrollChat() {
+  var c = document.getElementById('chat-messages');
+  c.scrollTop = c.scrollHeight;
+}
+
+// ══════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════
+updateMap();
+</script>
+</body>
+</html>
