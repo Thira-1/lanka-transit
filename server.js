@@ -138,6 +138,7 @@ app.get('/api/weather', async function(req, res) {
 });
 
 // ── Start the server ──
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, function() {
-  console.log('Lanka Transit server running at http://localhost:' + PORT);
+  console.log('Lanka Transit server running on port ' + PORT);
 });
